@@ -5,276 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaaS Security Downtime Cost Calculator</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  /* 1. Page background transparent so Framer’s light gray shows through */
+  html, body {
+    background: transparent;
+    margin: 0;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #111;               /* your site’s default text */
+  }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #0a0b0d;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+  /* 2. Wrap the calculator in a white “card” */
+  .calculator-container {
+    background: #fff;
+    border-radius: 16px;       /* matches your pricing cards */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-        .calculator-container {
-            background: #1a1b1e;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            max-width: 700px;
-            width: 100%;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+  /* 3. Make the header blend in */
+  .calculator-header {
+    background: none;
+    color: #111;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  .calculator-header h1 {
+    font-size: 2rem;
+    margin: 0;
+  }
+  .calculator-header p {
+    color: #6B7280;            /* your site’s secondary text color */
+  }
 
-        .header {
-            background: linear-gradient(135deg, #6b46c1 0%, #9333ea 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
+  /* 4. Form fields & buttons */
+  input, select {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    background: #F9FAFB;
+    color: #111;
+    font-size: 1rem;
+  }
+  button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    background: #7C5DFA;       /* your “primary” brand purple */
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  button:hover {
+    opacity: 0.9;
+  }
+</style>
 
-        .header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            line-height: 1.5;
-        }
-
-        .form-container {
-            padding: 40px 30px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #ffffff;
-            font-size: 1rem;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.05);
-            color: #ffffff;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: #9333ea;
-            box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
-            background: rgba(255,255,255,0.08);
-        }
-
-        select option {
-            background: #1a1b1e;
-            color: #ffffff;
-        }
-
-        input::placeholder {
-            color: rgba(255,255,255,0.5);
-        }
-
-        .info-box {
-            background: rgba(147, 51, 234, 0.1);
-            border: 1px solid rgba(147, 51, 234, 0.3);
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.8);
-        }
-
-        .info-box.warning {
-            background: rgba(234, 179, 8, 0.1);
-            border-color: rgba(234, 179, 8, 0.3);
-            color: #fbbf24;
-        }
-
-        .info-box strong {
-            color: #e879f9;
-            font-weight: 600;
-        }
-
-        .calculate-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #9333ea 0%, #6b46c1 100%);
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            box-shadow: 0 4px 14px rgba(147, 51, 234, 0.4);
-        }
-
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(147, 51, 234, 0.6);
-            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-        }
-
-        .results {
-            background: rgba(255,255,255,0.03);
-            border-radius: 16px;
-            padding: 30px;
-            margin-top: 30px;
-            display: none;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            font-size: 1rem;
-            color: rgba(255,255,255,0.9);
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: #ffffff;
-            padding-top: 20px;
-        }
-
-        .result-value {
-            font-weight: 600;
-            color: #e879f9;
-        }
-
-        .result-detail {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.6);
-            margin-top: 5px;
-        }
-
-        .breakdown-section {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(147, 51, 234, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(147, 51, 234, 0.2);
-        }
-
-        .breakdown-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-
-        .breakdown-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.7);
-            padding: 5px 0;
-        }
-
-        .methodology-note {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.7);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, #6b46c1 0%, #9333ea 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .cta-section h3 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-        }
-
-        .cta-section p {
-            margin-bottom: 25px;
-            opacity: 0.9;
-            line-height: 1.6;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-btn {
-            background: white;
-            color: #6b46c1;
-            padding: 15px 35px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            background: #f3f4f6;
-        }
-
-        .validation-error {
-            color: #f87171;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .source-citation {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.5);
-            font-style: italic;
-            margin-top: 3px;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .form-container {
-                padding: 30px 20px;
-            }
-        }
-    </style>
 </head>
 <body>
-    <div class="calculator-container">
-        <div class="header">
-            <h1>SaaS Security Downtime Cost Calculator</h1>
-            <p>Calculate realistic security incident costs based on 2024 industry research</p>
+  <div class="calculator-container">
+    <header class="calculator-header">
+      <h1>SaaS Security Downtime Cost Calculator</h1>
+      <p>Calculate realistic incident costs based on 2024 industry data.</p>
+    </header>
         </div>
 
         <div class="form-container">
