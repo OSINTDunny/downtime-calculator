@@ -1,46 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IT & OT Security Downtime Cost Calculator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SaaS Security Downtime Cost Calculator</title>
   <style>
-    /* 1. Page background transparent so Framer’s light gray shows through */
+    /* page background & text */
     html, body {
       background: transparent;
       margin: 0;
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: #111;               /* your site’s default text */
+      color: #111;
     }
 
-    /* 2. Wrap the calculator in a white “card” */
+    /* white card wrapper */
     .calculator-container {
       background: #fff;
-      border-radius: 16px;       /* matches your pricing cards */
+      border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       padding: 2rem;
       max-width: 800px;
       margin: 0 auto;
     }
 
-    /* 3. Make the header blend in */
+    /* header styling */
     .calculator-header {
-      background: none;
-      color: #111;
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       border-bottom: 1px solid #E5E7EB;
+      padding-bottom: 1rem;
     }
     .calculator-header h1 {
       font-size: 2rem;
       margin: 0;
     }
     .calculator-header p {
-      color: #6B7280;            /* your site’s secondary text color */
+      color: #6B7280;
       margin: 0.5rem 0 0;
     }
 
-    /* 4. Form fields & buttons */
+    /* form fields */
     .form-container label {
       display: block;
       margin-bottom: 0.5rem;
@@ -57,38 +55,63 @@
       font-size: 1rem;
     }
 
-    /* Primary button matches your Pricing page style (black) */
+    /* primary button */
     button {
       width: 100%;
       padding: 0.75rem;
       border: none;
       border-radius: 8px;
-      background: #111;          /* solid black */
-      color: #fff;               /* white text */
+      background: #111;
+      color: #fff;
       font-size: 1rem;
       font-weight: 500;
       cursor: pointer;
       margin-bottom: 1rem;
     }
     button:hover {
-      background: #333;          /* slightly lighter on hover */
+      background: #333;
     }
 
-    /* Hide results & CTA until after calculation */
-    .results,
+    /* results as receipt */
+    .results {
+      display: none;
+      margin-top: 2rem;
+      border-top: 1px solid #E5E7EB;
+    }
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #E5E7EB;
+      font-size: 1rem;
+    }
+    .result-item:last-child {
+      border-bottom: none;
+    }
+    .result-item.total {
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    /* CTA */
     .cta-section {
       display: none;
-      margin-top: 1.5rem;
+      margin-top: 2rem;
+      text-align: center;
     }
-    .results p {
-      margin: 0.5rem 0;
+    .cta-section a {
+      font-weight: 500;
+      color: #111;
+      text-decoration: none;
     }
 
-    /* Methodology text */
+    /* methodology text */
     .methodology {
       font-size: 0.875rem;
       color: #6B7280;
-      margin-top: 1.5rem;
+      margin-top: 2rem;
     }
   </style>
 </head>
@@ -142,17 +165,34 @@
     </div>
 
     <div id="results" class="results">
-      <p><strong>Annual Security Incidents (estimated):</strong> <span id="annualIncidents"></span></p>
-      <p><strong>Total Annual Downtime:</strong> <span id="totalDowntime"></span> hours</p>
-      <p><strong>Direct Revenue Loss:</strong> $<span id="revenueLoss"></span></p>
-      <p><strong>Employee Productivity Loss:</strong> $<span id="productivityLoss"></span></p>
-      <p><strong>Recovery & Incident Response:</strong> $<span id="responseCost"></span></p>
-      <p><strong>Total Annual Security Cost:</strong> $<span id="totalCost"></span></p>
+      <div class="result-item">
+        <span>Annual Security Incidents (estimated)</span>
+        <span id="annualIncidents"></span>
+      </div>
+      <div class="result-item">
+        <span>Total Annual Downtime</span>
+        <span><span id="totalDowntime"></span> hrs</span>
+      </div>
+      <div class="result-item">
+        <span>Direct Revenue Loss</span>
+        <span>$<span id="revenueLoss"></span></span>
+      </div>
+      <div class="result-item">
+        <span>Employee Productivity Loss</span>
+        <span>$<span id="productivityLoss"></span></span>
+      </div>
+      <div class="result-item">
+        <span>Recovery & Incident Response</span>
+        <span>$<span id="responseCost"></span></span>
+      </div>
+      <div class="result-item total">
+        <span>Total Annual Security Cost</span>
+        <span>$<span id="totalCost"></span></span>
+      </div>
     </div>
 
     <div class="cta-section" id="ctaSection">
-      <!-- Example CTA: adjust or remove as needed -->
-      <p>Ready to secure your SaaS? <a href="/get-started" style="font-weight:500; color:#111;">Get started today →</a></p>
+      <p>Ready to secure your SaaS? <a href="/get-started">Get started today →</a></p>
     </div>
 
     <p class="methodology">
@@ -164,30 +204,26 @@
     document.getElementById('calculatorForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      // Grab inputs
       const industry = document.getElementById('industry').value;
       const revenue = parseFloat(document.getElementById('revenue').value);
       const employees = parseInt(document.getElementById('employees').value, 10);
       const maturity = document.getElementById('maturity').value;
 
-      // (Insert your incident‑rate & cost‑factor logic here…)
-      // For example’s sake, we’ll do a dummy calculation:
+      // dummy calculation logic
       const annualIncidents = (revenue / 1e6) * (maturity === 'low' ? 3 : maturity === 'medium' ? 2 : 1);
-      const totalDowntime = annualIncidents * 2; // e.g. 2 hours per incident
+      const totalDowntime = annualIncidents * 2;
       const revenueLoss = (revenue / (365*24)) * totalDowntime;
       const productivityLoss = employees * 50 * totalDowntime;
       const responseCost = annualIncidents * 2000;
       const totalCost = Math.round(revenueLoss + productivityLoss + responseCost);
 
-      // Populate results
-      document.getElementById('annualIncidents').textContent = `${annualIncidents.toFixed(1)} incidents`;
+      document.getElementById('annualIncidents').textContent = annualIncidents.toFixed(1) + ' incidents';
       document.getElementById('totalDowntime').textContent = totalDowntime.toFixed(1);
       document.getElementById('revenueLoss').textContent = revenueLoss.toFixed(0);
       document.getElementById('productivityLoss').textContent = productivityLoss.toFixed(0);
       document.getElementById('responseCost').textContent = responseCost.toFixed(0);
       document.getElementById('totalCost').textContent = totalCost.toLocaleString();
 
-      // Show results & CTA
       document.getElementById('results').style.display = 'block';
       document.getElementById('ctaSection').style.display = 'block';
       document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
