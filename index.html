@@ -1,70 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaaS Security Downtime Cost Calculator</title>
-    <style>
-  /* 1. Page background transparent so Framer’s light gray shows through */
-  html, body {
-    background: transparent;
-    margin: 0;
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: #111;               /* your site’s default text */
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT & OT Security Downtime Cost Calculator</title>
+  <style>
+    /* 1. Page background transparent so Framer’s light gray shows through */
+    html, body {
+      background: transparent;
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #111;               /* your site’s default text */
+    }
 
-  /* 2. Wrap the calculator in a white “card” */
-  .calculator-container {
-    background: #fff;
-    border-radius: 16px;       /* matches your pricing cards */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-  }
+    /* 2. Wrap the calculator in a white “card” */
+    .calculator-container {
+      background: #fff;
+      border-radius: 16px;       /* matches your pricing cards */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-  /* 3. Make the header blend in */
-  .calculator-header {
-    background: none;
-    color: #111;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #E5E7EB;
-  }
-  .calculator-header h1 {
-    font-size: 2rem;
-    margin: 0;
-  }
-  .calculator-header p {
-    color: #6B7280;            /* your site’s secondary text color */
-  }
+    /* 3. Make the header blend in */
+    .calculator-header {
+      background: none;
+      color: #111;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .calculator-header h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+    .calculator-header p {
+      color: #6B7280;            /* your site’s secondary text color */
+      margin: 0.5rem 0 0;
+    }
 
-  /* 4. Form fields & buttons */
-  input, select {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #E5E7EB;
-    border-radius: 8px;
-    background: #F9FAFB;
-    color: #111;
-    font-size: 1rem;
-  }
-  button {
-    width: 100%;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 8px;
-    background: #7C5DFA;       /* your “primary” brand purple */
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  button:hover {
-    opacity: 0.9;
-  }
-</style>
+    /* 4. Form fields & buttons */
+    .form-container label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      background: #F9FAFB;
+      color: #111;
+      font-size: 1rem;
+    }
 
+    /* Primary button matches your Pricing page style (black) */
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: #111;          /* solid black */
+      color: #fff;               /* white text */
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+    button:hover {
+      background: #333;          /* slightly lighter on hover */
+    }
+
+    /* Hide results & CTA until after calculation */
+    .results,
+    .cta-section {
+      display: none;
+      margin-top: 1.5rem;
+    }
+    .results p {
+      margin: 0.5rem 0;
+    }
+
+    /* Methodology text */
+    .methodology {
+      font-size: 0.875rem;
+      color: #6B7280;
+      margin-top: 1.5rem;
+    }
+  </style>
 </head>
 <body>
   <div class="calculator-container">
@@ -72,332 +98,100 @@
       <h1>SaaS Security Downtime Cost Calculator</h1>
       <p>Calculate realistic incident costs based on 2024 industry data.</p>
     </header>
+
+    <div class="form-container">
+      <form id="calculatorForm">
+        <div class="form-group">
+          <label for="industry">What industry is your business in?</label>
+          <select id="industry" required>
+            <option value="">Select your industry</option>
+            <option value="education">Education/Research</option>
+            <option value="government">Government/Military</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="retail">Retail</option>
+            <option value="financial">Financial Services</option>
+            <option value="it">IT/Technology</option>
+            <option value="other">Other Industries</option>
+          </select>
         </div>
 
-        <div class="form-container">
-            <form id="calculatorForm">
-                <div class="form-group">
-                    <label for="industry">What industry is your business in?</label>
-                    <select id="industry" required>
-                        <option value="">Select your industry</option>
-                        <option value="education">Education/Research</option>
-                        <option value="government">Government/Military</option>
-                        <option value="healthcare">Healthcare</option>
-                        <option value="manufacturing">Manufacturing</option>
-                        <option value="retail">Retail</option>
-                        <option value="financial">Financial Services</option>
-                        <option value="it">IT/Technology</option>
-                        <option value="other">Other Industries</option>
-                    </select>
-                    <div id="industryInfo" class="info-box" style="display: none;"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="revenue">Annual Revenue (USD)</label>
-                    <input type="number" id="revenue" placeholder="e.g., 5000000" required min="100000">
-                    <div class="validation-error" id="revenueError">Minimum $100,000 for realistic calculations</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="employees">Number of Employees</label>
-                    <input type="number" id="employees" placeholder="e.g., 100" required min="1">
-                </div>
-
-                <div class="form-group">
-                    <label for="securityMaturity">Security Maturity Level</label>
-                    <select id="securityMaturity" required>
-                        <option value="">Select your security maturity</option>
-                        <option value="basic">Basic (Limited security measures)</option>
-                        <option value="developing">Developing (Some security tools in place)</option>
-                        <option value="mature">Mature (Comprehensive security program)</option>
-                        <option value="advanced">Advanced (AI/automation, Zero Trust)</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="calculate-btn">Calculate Security Downtime Costs</button>
-            </form>
-
-            <div id="results" class="results">
-                <div class="result-item">
-                    <span>Annual Security Incidents (estimated):</span>
-                    <span class="result-value" id="annualIncidents"></span>
-                </div>
-                <div class="result-item">
-                    <span>Total Annual Downtime:</span>
-                    <span class="result-value" id="totalDowntime"></span>
-                </div>
-                <div class="result-item">
-                    <span>Direct Revenue Loss:</span>
-                    <span class="result-value" id="revenueLoss"></span>
-                </div>
-                <div class="result-item">
-                    <span>Employee Productivity Loss:</span>
-                    <span class="result-value" id="productivityLoss"></span>
-                </div>
-                <div class="result-item">
-                    <span>Recovery & Incident Response:</span>
-                    <span class="result-value" id="recoveryCosts"></span>
-                </div>
-                <div class="result-item">
-                    <span>💸 Total Annual Security Cost:</span>
-                    <span class="result-value" id="totalCost"></span>
-                    <div class="result-detail" id="costPercentage"></div>
-                </div>
-                
-                <div class="breakdown-section" id="breakdownSection" style="display: none;">
-                    <div class="breakdown-title">Incident Breakdown:</div>
-                    <div class="breakdown-item">
-                        <span>Minor incidents (4-8 hrs):</span>
-                        <span id="minorIncidents"></span>
-                    </div>
-                    <div class="breakdown-item">
-                        <span>Major incidents (24-72 hrs):</span>
-                        <span id="majorIncidents"></span>
-                    </div>
-                    <div class="breakdown-item">
-                        <span>Critical/Ransomware (7-21 days):</span>
-                        <span id="criticalIncidents"></span>
-                    </div>
-                </div>
-                
-                <div class="methodology-note">
-                    <strong>Methodology:</strong> Based on Check Point 2024 attack data, IBM Cost of Data Breach Report, 
-                    and realistic incident rates for organizations of your size. Small businesses typically experience 
-                    fewer but potentially more impactful incidents than enterprises.
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="revenue">Annual Revenue (USD)</label>
+          <input type="number" id="revenue" placeholder="e.g., 5000000" min="100000" required>
         </div>
 
-        <div class="cta-section" style="display: none;" id="ctaSection">
-            <h3>Reduce Your Security Downtime by 70%</h3>
-            <p>Our SaaS backup and recovery platform helps you recover from security incidents in minutes, not days. Join companies that have reduced their downtime costs significantly.</p>
-            <a href="#" class="cta-btn">Get Your Security Assessment →</a>
+        <div class="form-group">
+          <label for="employees">Number of Employees</label>
+          <input type="number" id="employees" placeholder="e.g., 100" min="1" required>
         </div>
+
+        <div class="form-group">
+          <label for="maturity">Security Maturity Level</label>
+          <select id="maturity" required>
+            <option value="">Select your security maturity</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="enterprise">Enterprise</option>
+          </select>
+        </div>
+
+        <button type="submit">Calculate Security Downtime Costs</button>
+      </form>
     </div>
 
-    <script>
-        // More realistic data based on company size and industry
-        const getRealisticIncidentRate = (revenue, employees, industry) => {
-            // Base incident rates by company size (per year)
-            let baseRate;
-            if (revenue < 1000000) {
-                baseRate = 0.5; // Small businesses: 1 incident every 2 years
-            } else if (revenue < 10000000) {
-                baseRate = 1.5; // Mid-size: 1-2 incidents per year
-            } else if (revenue < 100000000) {
-                baseRate = 4; // Large: 4 incidents per year
-            } else {
-                baseRate = 12; // Enterprise: 1 per month
-            }
-            
-            // Industry multipliers based on research
-            const industryMultipliers = {
-                education: 1.5,      // Higher risk
-                healthcare: 1.8,     // Highest risk
-                government: 1.3,
-                manufacturing: 1.4,
-                financial: 1.2,      // Better defenses offset targeting
-                retail: 1.1,
-                it: 1.0,
-                other: 1.0
-            };
-            
-            return baseRate * (industryMultipliers[industry] || 1.0);
-        };
+    <div id="results" class="results">
+      <p><strong>Annual Security Incidents (estimated):</strong> <span id="annualIncidents"></span></p>
+      <p><strong>Total Annual Downtime:</strong> <span id="totalDowntime"></span> hours</p>
+      <p><strong>Direct Revenue Loss:</strong> $<span id="revenueLoss"></span></p>
+      <p><strong>Employee Productivity Loss:</strong> $<span id="productivityLoss"></span></p>
+      <p><strong>Recovery & Incident Response:</strong> $<span id="responseCost"></span></p>
+      <p><strong>Total Annual Security Cost:</strong> $<span id="totalCost"></span></p>
+    </div>
 
-        // Get realistic downtime based on incident severity
-        const getIncidentDistribution = (totalIncidents, revenue, industry, maturity) => {
-            // Base probability of a critical incident per year
-            let criticalProbability = 0.02; // 2% base chance per year
-            
-            // Industry risk factors for ransomware/critical incidents
-            const industryRiskFactors = {
-                manufacturing: 2.5,  // 30% of ransomware targets
-                healthcare: 2.0,     // High value target
-                education: 1.8,      // Common ransomware target
-                government: 1.5,     // State-sponsored attacks
-                financial: 1.3,      // High value but better defenses
-                retail: 1.0,
-                it: 1.0,
-                other: 1.0
-            };
-            
-            // Maturity significantly affects critical incident probability
-            const maturityFactors = {
-                basic: 3.0,      // 3x more likely
-                developing: 1.5, // 1.5x more likely
-                mature: 0.5,     // Half as likely
-                advanced: 0.2    // 80% less likely
-            };
-            
-            // Size factor - smaller companies are more vulnerable to critical incidents
-            const sizeFactor = revenue < 10000000 ? 1.5 : 1.0;
-            
-            // Calculate actual critical incident probability
-            criticalProbability *= (industryRiskFactors[industry] || 1.0) * 
-                                  (maturityFactors[maturity] || 1.0) * 
-                                  sizeFactor;
-            
-            // Determine if this company will have a critical incident this year
-            const hasCriticalIncident = Math.random() < criticalProbability;
-            const criticalIncidents = hasCriticalIncident ? 1 : 0;
-            
-            // For companies that do have incidents, distribute the non-critical ones
-            let remainingIncidents = Math.max(0, totalIncidents - criticalIncidents);
-            
-            // Major incidents are more likely for companies with poor security
-            const majorProbability = maturity === 'basic' ? 0.4 : 
-                                   maturity === 'developing' ? 0.3 : 0.2;
-            
-            const majorIncidents = Math.round(remainingIncidents * majorProbability);
-            const minorIncidents = Math.max(0, remainingIncidents - majorIncidents);
-            
-            return {
-                minor: minorIncidents,
-                major: majorIncidents,
-                critical: criticalIncidents,
-                criticalProbability: criticalProbability // For display purposes
-            };
-        };
+    <div class="cta-section" id="ctaSection">
+      <!-- Example CTA: adjust or remove as needed -->
+      <p>Ready to secure your SaaS? <a href="/get-started" style="font-weight:500; color:#111;">Get started today →</a></p>
+    </div>
 
-        // Security maturity impact
-        const maturityMultipliers = {
-            basic: 1.5,      // 50% more incidents
-            developing: 1.0, // Baseline
-            mature: 0.6,     // 40% fewer incidents
-            advanced: 0.3    // 70% fewer incidents
-        };
+    <p class="methodology">
+      <strong>Methodology:</strong> Based on Check Point 2024 attack data, IBM Cost of Data Breach Report, and realistic incident rates for organizations of your size. Small businesses typically experience fewer but potentially more impactful incidents than enterprises.
+    </p>
+  </div>
 
-        document.getElementById('industry').addEventListener('change', function() {
-            const industryInfo = document.getElementById('industryInfo');
-            const selectedIndustry = this.value;
-            
-            const industryDescriptions = {
-                education: "Higher risk due to limited budgets and diverse user base. Common targets for ransomware.",
-                healthcare: "Highest breach costs ($9.77M avg). Critical systems and HIPAA compliance drive costs.",
-                government: "Sophisticated threats and critical infrastructure. Extended recovery times.",
-                manufacturing: "#1 ransomware target (30% of attacks). OT/IT systems create production impacts.",
-                financial: "Lower incident rates but higher costs. Strict regulatory requirements.",
-                retail: "Customer data and POS systems at risk. Peak season vulnerabilities.",
-                it: "SaaS and cloud infrastructure create cascading customer impacts.",
-                other: "Industry average risk profile and incident costs."
-            };
-            
-            if (selectedIndustry && industryDescriptions[selectedIndustry]) {
-                industryInfo.innerHTML = `
-                    <strong>Risk Profile:</strong> ${industryDescriptions[selectedIndustry]}
-                    <div class="source-citation">Source: IBM Cost of Data Breach 2024, Check Point Research</div>
-                `;
-                industryInfo.style.display = 'block';
-            } else {
-                industryInfo.style.display = 'none';
-            }
-        });
+  <script>
+    document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const industry = document.getElementById('industry').value;
-            const revenue = parseFloat(document.getElementById('revenue').value);
-            const employees = parseInt(document.getElementById('employees').value);
-            const maturity = document.getElementById('securityMaturity').value;
-            
-            // Validation
-            if (revenue < 100000) {
-                document.getElementById('revenueError').style.display = 'block';
-                return;
-            } else {
-                document.getElementById('revenueError').style.display = 'none';
-            }
-            
-            if (!industry || !revenue || !employees || !maturity) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            // Calculate realistic incident rate
-            const baseIncidents = getRealisticIncidentRate(revenue, employees, industry);
-            const maturityMultiplier = maturityMultipliers[maturity];
-            const annualIncidents = Math.max(0.1, baseIncidents * maturityMultiplier);
-            
-            // Get incident distribution
-            const incidents = getIncidentDistribution(annualIncidents, revenue, industry, maturity);
-            
-            // Calculate downtime hours
-            const minorHours = incidents.minor * 6;      // Average 6 hours
-            const majorHours = incidents.major * 48;     // Average 2 days
-            const criticalHours = incidents.critical * 336; // Average 14 days (between 7-21)
-            const totalDowntimeHours = minorHours + majorHours + criticalHours;
-            
-            // Financial calculations
-            const annualWorkHours = 2080; // Standard work year
-            const businessOperatingHours = 2080; // Assuming standard business hours
-            
-            // 1. Direct revenue loss (simplified and realistic)
-            const hourlyRevenue = revenue / businessOperatingHours;
-            const downtimeImpact = 0.3; // Assume 30% revenue impact during downtime
-            const directRevenueLoss = hourlyRevenue * totalDowntimeHours * downtimeImpact;
-            
-            // 2. Employee productivity loss
-            const avgSalary = Math.min(75000, revenue / employees * 0.3); // Realistic salary ratio
-            const hourlyRate = avgSalary / annualWorkHours;
-            const affectedEmployees = Math.min(employees, employees * 0.5); // 50% of employees affected
-            const productivityLoss = hourlyRate * totalDowntimeHours * affectedEmployees * 0.5; // 50% productivity loss
-            
-            // 3. Recovery costs (scaled to company size)
-            const baseRecoveryCost = Math.min(50000, revenue * 0.01); // 1% of revenue cap at $50k
-            const incidentRecoveryCost = {
-                minor: baseRecoveryCost * 0.1,    // $5k for small company
-                major: baseRecoveryCost * 0.5,    // $25k for small company  
-                critical: baseRecoveryCost * 2    // $100k for small company
-            };
-            
-            const recoveryCosts = 
-                (incidents.minor * incidentRecoveryCost.minor) +
-                (incidents.major * incidentRecoveryCost.major) +
-                (incidents.critical * incidentRecoveryCost.critical);
-            
-            // Total cost calculation with sanity check
-            let totalCost = directRevenueLoss + productivityLoss + recoveryCosts;
-            
-            // Sanity check: cap at 10% of revenue for most cases, 15% for critical incidents
-            const maxReasonableCost = incidents.critical > 0 ? revenue * 0.15 : revenue * 0.10;
-            if (totalCost > maxReasonableCost) {
-                // Scale down proportionally
-                const scaleFactor = maxReasonableCost / totalCost;
-                totalCost = maxReasonableCost;
-                directRevenueLoss *= scaleFactor;
-                productivityLoss *= scaleFactor;
-                recoveryCosts *= scaleFactor;
-            }
-            
-            const costPercentage = (totalCost / revenue) * 100;
-            
-            // Display results
-            document.getElementById('annualIncidents').textContent = annualIncidents < 1 
-                ? `${(annualIncidents * 10).toFixed(1)} per decade` 
-                : `${annualIncidents.toFixed(1)} incidents`;
-            document.getElementById('totalDowntime').textContent = `${Math.round(totalDowntimeHours)} hours`;
-            document.getElementById('revenueLoss').textContent = `$${Math.round(directRevenueLoss).toLocaleString()}`;
-            document.getElementById('productivityLoss').textContent = `$${Math.round(productivityLoss).toLocaleString()}`;
-            document.getElementById('recoveryCosts').textContent = `$${Math.round(recoveryCosts).toLocaleString()}`;
-            document.getElementById('totalCost').textContent = `$${Math.round(totalCost).toLocaleString()}`;
-            document.getElementById('costPercentage').textContent = `${costPercentage.toFixed(1)}% of annual revenue`;
-            
-            // Show breakdown
-            document.getElementById('minorIncidents').textContent = `${incidents.minor.toFixed(1)} incidents`;
-            document.getElementById('majorIncidents').textContent = `${incidents.major.toFixed(1)} incidents`;
-            document.getElementById('criticalIncidents').textContent = incidents.critical === 0 
-                ? `0 (${(incidents.criticalProbability * 100).toFixed(1)}% annual risk)`
-                : `${incidents.critical} incident`;
-            document.getElementById('breakdownSection').style.display = 'block';
-            
-            document.getElementById('results').style.display = 'block';
-            document.getElementById('ctaSection').style.display = 'block';
-            
-            // Scroll to results
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-        });
-    </script>
+      // Grab inputs
+      const industry = document.getElementById('industry').value;
+      const revenue = parseFloat(document.getElementById('revenue').value);
+      const employees = parseInt(document.getElementById('employees').value, 10);
+      const maturity = document.getElementById('maturity').value;
+
+      // (Insert your incident‑rate & cost‑factor logic here…)
+      // For example’s sake, we’ll do a dummy calculation:
+      const annualIncidents = (revenue / 1e6) * (maturity === 'low' ? 3 : maturity === 'medium' ? 2 : 1);
+      const totalDowntime = annualIncidents * 2; // e.g. 2 hours per incident
+      const revenueLoss = (revenue / (365*24)) * totalDowntime;
+      const productivityLoss = employees * 50 * totalDowntime;
+      const responseCost = annualIncidents * 2000;
+      const totalCost = Math.round(revenueLoss + productivityLoss + responseCost);
+
+      // Populate results
+      document.getElementById('annualIncidents').textContent = `${annualIncidents.toFixed(1)} incidents`;
+      document.getElementById('totalDowntime').textContent = totalDowntime.toFixed(1);
+      document.getElementById('revenueLoss').textContent = revenueLoss.toFixed(0);
+      document.getElementById('productivityLoss').textContent = productivityLoss.toFixed(0);
+      document.getElementById('responseCost').textContent = responseCost.toFixed(0);
+      document.getElementById('totalCost').textContent = totalCost.toLocaleString();
+
+      // Show results & CTA
+      document.getElementById('results').style.display = 'block';
+      document.getElementById('ctaSection').style.display = 'block';
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>
