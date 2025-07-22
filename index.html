@@ -87,25 +87,29 @@
       padding: 0.75rem 0;
       border-bottom: 1px solid #E5E7EB;
       font-size: 1rem;
+      background: transparent;
+      color: #111;
     }
     .result-item:last-child {
       border-bottom: none;
     }
+    /* Total Annual Security Cost: black text on red highlight */
     .result-item.total {
       font-weight: 600;
       font-size: 1.125rem;
       padding: 1rem 0;
+      background: #FF643A;
+      color: #111;
     }
+    /* Estimated Savings with Respawn: black text on blue highlight */
     .result-item.savings {
       font-weight: 600;
       font-size: 1.125rem;
       padding: 1rem 0;
+      background: #51C5FB;
+      color: #111;
       border-top: 1px solid #E5E7EB;
       margin-top: 0.5rem;
-      color: #51C5FB;           /* highlight the entire row in your brand blue */
-    }
-    .result-item.savings span {
-      color: #51C5FB;
     }
 
     /* CTA */
@@ -217,9 +221,9 @@
       const employees = parseInt(document.getElementById('employees').value, 10);
       const maturity = document.getElementById('maturity').value;
 
-      // your incident‑rate & cost‑factor logic
+      // incident‑rate & cost‑factor logic
       const annualIncidents = (revenue / 1e6) * (maturity === 'low' ? 3 : maturity === 'medium' ? 2 : 1);
-      const totalDowntime = annualIncidents * 2; // hours
+      const totalDowntime = annualIncidents * 2;
       const revenueLoss = (revenue / (365*24)) * totalDowntime;
       const productivityLoss = employees * 50 * totalDowntime;
       const responseCost = annualIncidents * 2000;
