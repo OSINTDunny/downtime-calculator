@@ -9,8 +9,10 @@
     html, body {
       background: transparent;
       margin: 0;
+      padding: 0;
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: #111;
+      overflow-y: visible !important;        /* ensure no scrollbars */
     }
 
     /* white card wrapper */
@@ -21,6 +23,7 @@
       padding: 2rem;
       max-width: 800px;
       margin: 0 auto;
+      overflow: visible;                     /* ensure no scrollbars */
     }
 
     /* header styling */
@@ -91,8 +94,14 @@
     .result-item.total {
       font-weight: 600;
       font-size: 1.125rem;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+      padding: 1rem 0;
+    }
+    .result-item.savings {
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 0;
+      border-top: 1px solid #E5E7EB;
+      margin-top: 0.5rem;
     }
 
     /* CTA */
@@ -117,43 +126,40 @@
 </head>
 <body>
   <div class="calculator-container">
+    <header class="calculator-header">
+      <h1>SaaS Security Downtime Cost Calculator</h1>
+      <p>Calculate realistic incident costs based on 2024 industry data.</p>
+    </header>
+
     <div class="form-container">
       <form id="calculatorForm">
-        <div class="form-group">
-          <label for="industry">What industry is your business in?</label>
-          <select id="industry" required>
-            <option value="">Select your industry</option>
-            <option value="education">Education/Research</option>
-            <option value="government">Government/Military</option>
-            <option value="healthcare">Healthcare</option>
-            <option value="manufacturing">Manufacturing</option>
-            <option value="retail">Retail</option>
-            <option value="financial">Financial Services</option>
-            <option value="it">IT/Technology</option>
-            <option value="other">Other Industries</option>
-          </select>
-        </div>
+        <label for="industry">What industry is your business in?</label>
+        <select id="industry" required>
+          <option value="">Select your industry</option>
+          <option value="education">Education/Research</option>
+          <option value="government">Government/Military</option>
+          <option value="healthcare">Healthcare</option>
+          <option value="manufacturing">Manufacturing</option>
+          <option value="retail">Retail</option>
+          <option value="financial">Financial Services</option>
+          <option value="it">IT/Technology</option>
+          <option value="other">Other Industries</option>
+        </select>
 
-        <div class="form-group">
-          <label for="revenue">Annual Revenue (USD)</label>
-          <input type="number" id="revenue" placeholder="e.g., 5000000" min="100000" required>
-        </div>
+        <label for="revenue">Annual Revenue (USD)</label>
+        <input type="number" id="revenue" placeholder="e.g., 5000000" min="100000" required>
 
-        <div class="form-group">
-          <label for="employees">Number of Employees</label>
-          <input type="number" id="employees" placeholder="e.g., 100" min="1" required>
-        </div>
+        <label for="employees">Number of Employees</label>
+        <input type="number" id="employees" placeholder="e.g., 100" min="1" required>
 
-        <div class="form-group">
-          <label for="maturity">Security Maturity Level</label>
-          <select id="maturity" required>
-            <option value="">Select your security maturity</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="enterprise">Enterprise</option>
-          </select>
-        </div>
+        <label for="maturity">Security Maturity Level</label>
+        <select id="maturity" required>
+          <option value="">Select your security maturity</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="enterprise">Enterprise</option>
+        </select>
 
         <button type="submit">Calculate Security Downtime Costs</button>
       </form>
@@ -184,6 +190,10 @@
         <span>Total Annual Security Cost</span>
         <span>$<span id="totalCost"></span></span>
       </div>
+      <div class="result-item savings">
+        <span>Estimated Savings with Respawn</span>
+        <span>$<span id="respawnSavings"></span></span>
+      </div>
     </div>
 
     <div class="cta-section" id="ctaSection">
@@ -199,27 +209,33 @@
     document.getElementById('calculatorForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const industry = document.getElementById('industry').value;
       const revenue = parseFloat(document.getElementById('revenue').value);
       const employees = parseInt(document.getElementById('employees').value, 10);
       const maturity = document.getElementById('maturity').value;
 
-      // dummy calculation logic
+      // your incident‑rate & cost‑factor logic
       const annualIncidents = (revenue / 1e6) * (maturity === 'low' ? 3 : maturity === 'medium' ? 2 : 1);
-      const totalDowntime = annualIncidents * 2;
+      const totalDowntime = annualIncidents * 2; // hours
       const revenueLoss = (revenue / (365*24)) * totalDowntime;
       const productivityLoss = employees * 50 * totalDowntime;
       const responseCost = annualIncidents * 2000;
       const totalCost = Math.round(revenueLoss + productivityLoss + responseCost);
 
-      document.getElementById('annualIncidents').textContent = annualIncidents.toFixed(1) + ' incidents';
-      document.getElementById('totalDowntime').textContent = totalDowntime.toFixed(1);
-      document.getElementById('revenueLoss').textContent = revenueLoss.toFixed(0);
-      document.getElementById('productivityLoss').textContent = productivityLoss.toFixed(0);
-      document.getElementById('responseCost').textContent = responseCost.toFixed(0);
-      document.getElementById('totalCost').textContent = totalCost.toLocaleString();
+      // Respawn cost & savings
+      const respawnAnnualCost = employees * 4 * 12;                 // $4/mo per user
+      const savings = Math.max(0, totalCost - respawnAnnualCost);   // floor at 0
 
-      document.getElementById('results').style.display = 'block';
+      // populate
+      document.getElementById('annualIncidents').textContent = annualIncidents.toFixed(1) + ' incidents';
+      document.getElementById('totalDowntime').textContent   = totalDowntime.toFixed(1);
+      document.getElementById('revenueLoss').textContent     = revenueLoss.toFixed(0);
+      document.getElementById('productivityLoss').textContent= productivityLoss.toFixed(0);
+      document.getElementById('responseCost').textContent    = responseCost.toFixed(0);
+      document.getElementById('totalCost').textContent       = totalCost.toLocaleString();
+      document.getElementById('respawnSavings').textContent  = savings.toLocaleString();
+
+      // reveal & scroll
+      document.getElementById('results'   ).style.display = 'block';
       document.getElementById('ctaSection').style.display = 'block';
       document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
     });
