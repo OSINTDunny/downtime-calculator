@@ -134,11 +134,6 @@
 </head>
 <body>
   <div class="calculator-container">
-    <header class="calculator-header">
-      <h1>SaaS Security Downtime Cost Calculator</h1>
-      <p>Calculate realistic incident costs based on 2024 industry data.</p>
-    </header>
-
     <div class="form-container">
       <form id="calculatorForm">
         <label for="industry">What industry is your business in?</label>
@@ -169,7 +164,7 @@
           <option value="enterprise">Enterprise</option>
         </select>
 
-        <button type="submit">Calculate Security Downtime Costs</button>
+        <button type="submit">Calculate Disaster Cost</button>
       </form>
     </div>
 
@@ -195,7 +190,7 @@
         <span>$<span id="responseCost"></span></span>
       </div>
       <div class="result-item total">
-        <span>Total Annual Security Cost</span>
+        <span>Total Downtime Cost</span>
         <span>$<span id="totalCost"></span></span>
       </div>
       <div class="result-item savings">
@@ -204,14 +199,8 @@
       </div>
     </div>
 
-    <div class="cta-section" id="ctaSection">
-      <p>Ready to secure your SaaS? <a href="/get-started">Get started today →</a></p>
-    </div>
-
     <p class="methodology">
-      <strong>Methodology:</strong> Based on Check Point 2024 attack data, IBM Cost of Data Breach Report, and realistic incident rates for organizations of your size. Small businesses typically experience fewer but potentially more impactful incidents than enterprises.
-    </p>
-  </div>
+      <strong>Methodology:</strong> Based on Check Point 2024 attack data, IBM Cost of Data Breach Report, and realistic incident rates for organizations of your size.
 
   <script>
     document.getElementById('calculatorForm').addEventListener('submit', function(e) {
