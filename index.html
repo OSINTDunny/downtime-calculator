@@ -219,8 +219,8 @@
       const totalCost = Math.round(revenueLoss + productivityLoss + responseCost);
 
       // Respawn cost & savings
-      const respawnAnnualCost = employees * 4 * 12;
-      const savings = Math.max(0, totalCost - respawnAnnualCost);
+      const respawnAnnualCost = Math.max(employees * 4 * 12, 1000);
+      const savings           = Math.max(0, totalCost - respawnAnnualCost);
 
       // populate
       document.getElementById('annualIncidents').textContent  = annualIncidents.toFixed(1) + ' incidents';
